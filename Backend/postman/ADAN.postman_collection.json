@@ -1,0 +1,593 @@
+{
+    "info": {
+        "_postman_id": "c4a8e2b1-9f3d-4e7c-a1b2-3d4e5f607890",
+        "name": "ADAN API",
+        "description": "Animal Disease Alert Network — REST API collection.\n\n**Setup:** Import this file in Postman, set collection variables `base_url` (e.g. `http://localhost:8000/api`) and `token` (paste the `token` value from **Auth → Login**).\n\nAuthenticated requests use Bearer auth from `{{token}}`.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api"
+        },
+        {
+            "key": "token",
+            "value": ""
+        },
+        {
+            "key": "country_id",
+            "value": "1"
+        },
+        {
+            "key": "governorate_id",
+            "value": "1"
+        },
+        {
+            "key": "city_id",
+            "value": "1"
+        },
+        {
+            "key": "category_id",
+            "value": "1"
+        },
+        {
+            "key": "animal_id",
+            "value": "1"
+        },
+        {
+            "key": "user_animal_id",
+            "value": "1"
+        },
+        {
+            "key": "schedule_id",
+            "value": "1"
+        },
+        {
+            "key": "report_id",
+            "value": "1"
+        },
+        {
+            "key": "notification_id",
+            "value": "1"
+        }
+    ],
+    "item": [
+        {
+            "name": "System",
+            "item": [
+                {
+                    "name": "Health",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": "{{base_url}}/health"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"user@example.com\",\n  \"phone\": \"+201000000000\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"region_id\": null\n}"
+                        },
+                        "url": "{{base_url}}/auth/register"
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const json = pm.response.json();",
+                                    "if (json.token) {",
+                                    "  pm.collectionVariables.set('token', json.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"customer@adan.com\",\n  \"password\": \"password\"\n}"
+                        },
+                        "url": "{{base_url}}/auth/login"
+                    }
+                },
+                {
+                    "name": "Send OTP",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"phone\": \"+201000000000\"\n}"
+                        },
+                        "url": "{{base_url}}/auth/send-otp"
+                    }
+                },
+                {
+                    "name": "Verify OTP",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"phone\": \"+201000000000\",\n  \"otp\": \"000000\"\n}"
+                        },
+                        "url": "{{base_url}}/auth/verify-otp"
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/auth/logout"
+                    }
+                },
+                {
+                    "name": "Me",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/auth/me"
+                    }
+                },
+                {
+                    "name": "Update profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Updated Name\",\n  \"email\": \"user@example.com\",\n  \"phone\": \"+201000000000\",\n  \"region_id\": 1\n}"
+                        },
+                        "url": "{{base_url}}/auth/profile"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Locations",
+            "item": [
+                {
+                    "name": "List countries",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/locations/countries"
+                    }
+                },
+                {
+                    "name": "Governorates by country",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/locations/countries/{{country_id}}/governorates"
+                    }
+                },
+                {
+                    "name": "Cities by governorate",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/locations/governorates/{{governorate_id}}/cities"
+                    }
+                },
+                {
+                    "name": "Regions by city",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/locations/cities/{{city_id}}/regions"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Animals (catalog)",
+            "item": [
+                {
+                    "name": "List categories",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/animals/categories"
+                    }
+                },
+                {
+                    "name": "Animals in category",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/animals/categories/{{category_id}}"
+                    }
+                },
+                {
+                    "name": "Show animal",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/animals/{{animal_id}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Reports (public)",
+            "item": [
+                {
+                    "name": "Approved reports",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/reports/approved"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "My animals",
+            "item": [
+                {
+                    "name": "List",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/my-animals"
+                    }
+                },
+                {
+                    "name": "Register animal",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"animal_id\": 1,\n  \"nickname\": \"Bella\",\n  \"birth_date\": \"2023-01-15\",\n  \"last_vaccine_date\": null,\n  \"notes\": null\n}"
+                        },
+                        "url": "{{base_url}}/my-animals"
+                    }
+                },
+                {
+                    "name": "Show",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/my-animals/{{user_animal_id}}"
+                    }
+                },
+                {
+                    "name": "Delete",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/my-animals/{{user_animal_id}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Vaccine schedules",
+            "item": [
+                {
+                    "name": "List",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/vaccine-schedules"
+                    }
+                },
+                {
+                    "name": "Mark done",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/vaccine-schedules/{{schedule_id}}/mark-done"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Notifications",
+            "item": [
+                {
+                    "name": "List",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/notifications"
+                    }
+                },
+                {
+                    "name": "Unread count",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/notifications/unread-count"
+                    }
+                },
+                {
+                    "name": "Mark read",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/notifications/{{notification_id}}/read"
+                    }
+                },
+                {
+                    "name": "Mark all read",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/notifications/mark-all-read"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "My reports",
+            "item": [
+                {
+                    "name": "List",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/reports"
+                    }
+                },
+                {
+                    "name": "Create (JSON — no files)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"animal_id\": 1,\n  \"region_id\": 1,\n  \"title\": \"Observed symptoms in herd\",\n  \"description\": \"Detailed description of at least twenty characters for validation.\",\n  \"severity\": \"moderate\",\n  \"latitude\": 30.0444,\n  \"longitude\": 31.2357\n}"
+                        },
+                        "url": "{{base_url}}/reports",
+                        "description": "API validates `images` as multipart files. For uploads, duplicate this request, set body to **form-data**, add fields `animal_id`, `region_id`, `title`, `description`, `severity`, optional `latitude`/`longitude`, and `images` as file type."
+                    }
+                },
+                {
+                    "name": "Show",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/reports/{{report_id}}"
+                    }
+                }
+            ]
+        }
+    ]
+}
