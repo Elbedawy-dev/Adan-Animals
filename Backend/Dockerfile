@@ -21,8 +21,6 @@ COPY . .
 
 RUN composer install --optimize-autoloader --no-dev
 
-RUN php artisan config:cache || true
-
 EXPOSE 10000
 
-CMD php artisan serve --host 0.0.0.0 --port $PORT
+CMD php artisan config:clear && php artisan serve --host 0.0.0.0 --port $PORT
