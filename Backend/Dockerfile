@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     sqlite3 \
     libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_sqlite mbstring zip exif pcntl gd intl
+    && docker-php-ext-install pdo pdo_sqlite pdo_mysql mbstring zip exif pcntl gd intl
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
