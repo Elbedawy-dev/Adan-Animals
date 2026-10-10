@@ -82,59 +82,61 @@ class AuthController extends Controller
         ]);
     }
 
-    public function sendOtp(Request $request): JsonResponse
-    {
-        $request->validate([
-            'phone' => 'required|exists:users,phone',
-        ]);
+    // TODO: Disabled - OTP functionality
+    // public function sendOtp(Request $request): JsonResponse
+    // {
+    //     $request->validate([
+    //         'phone' => 'required|exists:users,phone',
+    //     ]);
 
-        $user = User::where('phone', $request->phone)->firstOrFail();
+    //     $user = User::where('phone', $request->phone)->firstOrFail();
 
-        $otp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    //     $otp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        $user->update([
-            'otp' => $otp,
-            'otp_expires_at' => now()->addMinutes(10),
-        ]);
+    //     $user->update([
+    //         'otp' => $otp,
+    //         'otp_expires_at' => now()->addMinutes(10),
+    //     ]);
 
-        return response()->json([
-            'message' => __('api.auth_otp_sent'),
-            '_debug_otp' => $otp,
-        ]);
-    }
+    //     return response()->json([
+    //         'message' => __('api.auth_otp_sent'),
+    //         '_debug_otp' => $otp,
+    //     ]);
+    // }
 
-    public function verifyOtp(Request $request): JsonResponse
-    {
-        $request->validate([
-            'phone' => 'required|exists:users,phone',
-            'otp' => 'required|string|size:6',
-            'fcm_token' => 'nullable|string|max:2048',
-        ]);
+    // TODO: Disabled - OTP functionality
+    // public function verifyOtp(Request $request): JsonResponse
+    // {
+    //     $request->validate([
+    //         'phone' => 'required|exists:users,phone',
+    //         'otp' => 'required|string|size:6',
+    //         'fcm_token' => 'nullable|string|max:2048',
+    //     ]);
 
-        $user = User::where('phone', $request->phone)->firstOrFail();
+    //     $user = User::where('phone', $request->phone)->firstOrFail();
 
-        if (! $user->isOtpValid() || $user->otp !== $request->otp) {
-            return response()->json([
-                'message' => __('api.auth_otp_invalid'),
-            ], 422);
-        }
+    //     if (! $user->isOtpValid() || $user->otp !== $request->otp) {
+    //         return response()->json([
+    //             'message' => __('api.auth_otp_invalid'),
+    //         ], 422);
+    //     }
 
-        if (! $user->hasVerifiedEmail()) {
-            $user->markEmailAsVerified();
-        }
+    //     if (! $user->hasVerifiedEmail()) {
+    //         $user->markEmailAsVerified();
+    //     }
 
-        $user->update(['otp' => null, 'otp_expires_at' => null]);
+    //     $user->update(['otp' => null, 'otp_expires_at' => null]);
 
-        $token = $user->createToken('otp-token')->plainTextToken;
+    //     $token = $user->createToken('otp-token')->plainTextToken;
 
-        $this->persistFcmToken($user, $request->input('fcm_token'));
+    //     $this->persistFcmToken($user, $request->input('fcm_token'));
 
-        return response()->json([
-            'message' => __('api.auth_otp_verified'),
-            'token' => $token,
-            'user' => $this->formatUser($user->fresh()),
-        ]);
-    }
+    //     return response()->json([
+    //         'message' => __('api.auth_otp_verified'),
+    //         'token' => $token,
+    //         'user' => $this->formatUser($user->fresh()),
+    //     ]);
+    // }
 
     public function updateFcmToken(Request $request): JsonResponse
     {

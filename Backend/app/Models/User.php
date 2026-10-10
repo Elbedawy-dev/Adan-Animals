@@ -64,11 +64,12 @@ class User extends Authenticatable implements FilamentUser, HasMedia, MustVerify
         return $this->role === 'customer';
     }
 
-    public function isOtpValid(): bool
-    {
-        return $this->otp !== null && $this->otp_expires_at !== null
-            && $this->otp_expires_at->isFuture();
-    }
+    // TODO: Disabled - OTP functionality
+    // public function isOtpValid(): bool
+    // {
+    //     return $this->otp !== null && $this->otp_expires_at !== null
+    //         && $this->otp_expires_at->isFuture();
+    // }
 
     // ─── Relationships ───
     public function region(): BelongsTo
