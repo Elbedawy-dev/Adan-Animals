@@ -10,10 +10,13 @@ import {
 import { Visibility, VisibilityOff, Pets } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import api from '../../api/axios';
+import useAuth from '../../hooks/useAuth';
+import { getWebFcmToken } from '../../firebase/fcmToken';
 
 export default function Register() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [step, setStep]     = useState(1);
   const [form, setForm]     = useState({
@@ -24,7 +27,8 @@ export default function Register() {
     password_confirmation: '',
     region_id:             '',
   });
-  const [otp, setOtp]                     = useState('');
+  // OTP-DISABLED
+  // const [otp, setOtp]                     = useState('');
   const [showPassword, setShowPassword]   = useState(false);
   const [loading, setLoading]             = useState(false);
   const [errors, setErrors]               = useState({});
@@ -128,8 +132,18 @@ export default function Register() {
         password_confirmation: form.password_confirmation,
         region_id:             form.region_id || null,
       });
-      toast.success(t('toasts.registeredVerify'));
-      setStep(2);
+      // OTP-DISABLED
+      // toast.success(t('toasts.registeredVerify'));
+      // setStep(2);
+      const fcmToken = await getWebFcmToken().catch(() => null);
+      const loginRes = await api.post('/auth/login', {
+        email: form.email,
+        password: form.password,
+        fcm_token: fcmToken ?? '',
+      });
+      login(loginRes.data.token, loginRes.data.user);
+      toast.success(t('toasts.welcomeBack'));
+      navigate('/app/dashboard');
     } catch (err) {
       const serverErrors = err.response?.data?.errors;
       if (serverErrors) setErrors(serverErrors);
@@ -139,35 +153,37 @@ export default function Register() {
     }
   };
 
-  // Verify OTP
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    if (!otp) {
-      toast.error(t('toasts.enterOtp'));
-      return;
-    }
-    setLoading(true);
-    try {
+  // OTP-DISABLED
+  // // Verify OTP
+  // const handleVerifyOtp = async (e) => {
+  //   e.preventDefault();
+  //   if (!otp) {
+  //     toast.error(t('toasts.enterOtp'));
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   try {
 
-      // await api.post('/auth/verify-otp', { phone: form.phone, otp });
-      toast.success(t('toasts.emailVerified'));
-      navigate('/login');
-    } catch (err) {
-      toast.error(err.response?.data?.message || t('toasts.invalidOtp'));
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // await api.post('/auth/verify-otp', { phone: form.phone, otp });
+  //     toast.success(t('toasts.emailVerified'));
+  //     navigate('/login');
+  //   } catch (err) {
+  //     toast.error(err.response?.data?.message || t('toasts.invalidOtp'));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  // Resend OTP
-  const handleResendOtp = async () => {
-    try {
-      // await api.post('/auth/send-otp', { phone: form.phone });
-      toast.success(t('toasts.otpResent'));
-    } catch {
-      toast.error(t('toasts.otpResendFailed'));
-    }
-  };
+  // OTP-DISABLED
+  // // Resend OTP
+  // const handleResendOtp = async () => {
+  //   try {
+  //     // await api.post('/auth/send-otp', { phone: form.phone });
+  //     toast.success(t('toasts.otpResent'));
+  //   } catch {
+  //     toast.error(t('toasts.otpResendFailed'));
+  //   }
+  // };
 
   return (
     <Box
@@ -348,7 +364,8 @@ export default function Register() {
             </>
           )}
 
-          {step === 2 && (
+          {/* OTP-DISABLED */}
+          {/* {step === 2 && (
             <>
               <Typography variant="h6" fontWeight="bold" mb={1}>
                 {t('auth.verifyEmailTitle')}
@@ -395,7 +412,7 @@ export default function Register() {
 
               </Box>
             </>
-          )}
+          )} */}
 
         </CardContent>
       </Card>
