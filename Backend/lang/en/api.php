@@ -13,9 +13,10 @@ return [
     'auth_verify_email_first' => 'Please verify your email address before logging in. Check your inbox for a verification link.',
     'auth_login_success' => 'Login successful.',
     'auth_invalid_credentials' => 'The provided credentials are incorrect.',
-    'auth_otp_sent' => 'OTP sent successfully. Valid for 10 minutes.',
-    'auth_otp_invalid' => 'Invalid or expired OTP. Please request a new one.',
-    'auth_otp_verified' => 'OTP verified. Login successful.',
+    // TODO: Disabled - OTP functionality
+    // 'auth_otp_sent' => 'OTP sent successfully. Valid for 10 minutes.',
+    // 'auth_otp_invalid' => 'Invalid or expired OTP. Please request a new one.',
+    // 'auth_otp_verified' => 'OTP verified. Login successful.',
     'auth_logout_success' => 'Logged out successfully.',
     'auth_profile_updated' => 'Profile updated successfully.',
 
